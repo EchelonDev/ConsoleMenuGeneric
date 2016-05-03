@@ -10,8 +10,10 @@ namespace ConsoleMenuGeneric
     {
         static void Main(string[] args)
         {
+            Console.BufferWidth = Console.WindowWidth = 35;
+            Console.BufferHeight = Console.WindowHeight;
             EchelonLib.Menu m1 = new EchelonLib.Menu("New Game", "Load Game", "About", "Exit");
-            switch (m1.Display(10, 5, true))
+            switch (m1.Display(12, 10, true))
             {
                 case 0:
                     {
