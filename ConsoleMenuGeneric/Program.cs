@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EchelonLib;
 
 namespace ConsoleMenuGeneric
 {
@@ -11,8 +12,8 @@ namespace ConsoleMenuGeneric
         static void Main(string[] args)
         {
             Console.BufferWidth = Console.WindowWidth = 35;
-            Console.BufferHeight = Console.WindowHeight;
-            EchelonLib.Menu m1 = new EchelonLib.Menu("New Game", "Load Game", "About", "Exit");
+            Console.BufferHeight = Console.WindowHeight;            
+            Menu m1 = new Menu(ConsoleColor.Black,ConsoleColor.Green,ConsoleColor.Green,ConsoleColor.Black,"New Game", "Load Game", "About", "Exit");
             switch (m1.Display(12, 10, true))
             {
                 case 0:
@@ -98,23 +99,33 @@ namespace EchelonLib
             bool isEnded = false;
             int selectedindex = 0;
             int RowIndex = y;
-            int RowLen = 0;
-            string ex = "";
             Console.CursorVisible = false;
-            if (arrow) Io.Wat('>', x - 2, RowIndex);
             do
-            {
-                Console.Clear();
+            {   //Because Console.Clear() is gone, we can have border layouting the window in main process not here , before when clear was a thing in here            
+                //I had to re-draw the border every clear. now it is not necerssary
+                //AFTER re-writing the io.border (a.k.a. pile of crapbag) delete this message if you want to...
+                //  --TLDR--
+                //         ┌ This shiet is not necessary anymore
+                //         │
+                //         ↓
+                //Io.Border();
+                Console.ForegroundColor = uItemFg;
                 if (arrow) Io.Wat('>', x - 2, RowIndex + selectedindex);
+                Console.ForegroundColor = cFg;
                 foreach (var row in _values)
                 {
                     Console.ForegroundColor = uItemFg;
                     Console.BackgroundColor = uItemBg;
-                    if (RowIndex == selectedindex)
+                    if (RowIndex == y + selectedindex)
                     {
                         Console.ForegroundColor = ItemFg;
                         Console.BackgroundColor = ItemBg;
                     }
+                    else
+                    {
+                        if (arrow) Io.Wat(' ', x - 2, RowIndex);
+                        // Delete other arrows cuz I don't want to have a Console.Clear().
+                    }                    
                     Io.Wat(row, x, RowIndex++);
                     Console.ForegroundColor = cFg;
                     Console.BackgroundColor = cBg;
@@ -160,6 +171,20 @@ namespace EchelonLib
             Console.CursorTop = y;
 
             Console.Write(arg.ToString());
+        }
+        public static void Border()
+        {
+            // TODO : Fix this crap of shitbag, shit of crapbag or bag of crapshit... pls...
+            int lenX = Console.WindowWidth;
+            int lenY = Console.WindowHeight;
+            Io.Wat('╔', 0, 0);
+            Io.Wat('╚', 0, lenY - 1);
+            Io.Wat('╝', lenX - 1, lenY - 1);
+            //Io.Wat('╗', lenX - 1, 0);
+            for (int i = 1; i < lenX - 1; i++)
+            {
+                Io.Wat('═', i, 0);
+            }
         }
     }
 }
