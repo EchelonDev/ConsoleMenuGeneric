@@ -139,6 +139,7 @@ namespace EchelonLib
 
                 switch (Console.ReadKey(true).Key)
                 {
+                    case ConsoleKey.W:
                     case ConsoleKey.UpArrow:
                         {
                             if (selectedindex == 0)
@@ -147,6 +148,7 @@ namespace EchelonLib
                                 selectedindex--;
                         }
                         break;
+                    case ConsoleKey.S:
                     case ConsoleKey.DownArrow:
                         {
                             if (selectedindex == _values.Length - 1)
@@ -155,6 +157,7 @@ namespace EchelonLib
                                 selectedindex++;
                         }
                         break;
+                    case ConsoleKey.RightArrow:
                     case ConsoleKey.Enter:
                         {
                             isEnded = true;
