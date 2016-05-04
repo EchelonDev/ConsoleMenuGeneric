@@ -62,6 +62,8 @@ namespace EchelonLib
 
         public Menu(params string[] values)
         {
+            //Can we directly '=' two arrays to each other...
+            // if yes get rid of these shiet
             _values = new string[values.Length];
             values.CopyTo(_values, 0);
             cFg = Console.ForegroundColor;
@@ -70,6 +72,8 @@ namespace EchelonLib
 
         public Menu(ConsoleColor Fg, ConsoleColor Bg, params string[] values)
         {
+            //Can we directly '=' two arrays to each other...
+            // if yes get rid of these shiet
             _values = new string[values.Length];
             values.CopyTo(_values, 0);
             cFg = Console.ForegroundColor;
@@ -79,6 +83,8 @@ namespace EchelonLib
         }
         public Menu(ConsoleColor Fg, ConsoleColor Bg, ConsoleColor uFg, ConsoleColor uBg, params string[] values)
         {
+            //Can we directly '=' two arrays to each other...
+            // if yes get rid of these shiet
             _values = new string[values.Length];
             values.CopyTo(_values, 0);
             cFg = Console.ForegroundColor;
