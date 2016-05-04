@@ -48,6 +48,9 @@ namespace EchelonLib
     /// <summary>
     /// --------- TODO ---------
     /// 1 - DisplayMethod for justify or centered menu text.
+    /// 
+    /// --------- Notes ---------
+    /// 1 - Consider not using Dmethod enum cuz not user-friendly ()
     /// </summary>
     class Menu
     {
