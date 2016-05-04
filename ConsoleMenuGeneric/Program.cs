@@ -13,8 +13,9 @@ namespace ConsoleMenuGeneric
         {
             Console.BufferWidth = Console.WindowWidth = 35;
             Console.BufferHeight = Console.WindowHeight;            
-            Menu m1 = new Menu(ConsoleColor.Black,ConsoleColor.Green,ConsoleColor.Green,ConsoleColor.Black,"New Game", "Load Game", "About", "Exit");
-            switch (m1.Display(12, 10, true))
+            Menu m1 = new Menu(ConsoleColor.Black,ConsoleColor.Green,ConsoleColor.Green,ConsoleColor.Black,"Teeeeeeest", "teeest", "Teeeeeeeeeeest", "tst");
+
+            switch (m1.Display(12, 10,Menu.Dmethod.Centered))
             {
                 case 0:
                     {
@@ -44,6 +45,10 @@ namespace ConsoleMenuGeneric
 
 namespace EchelonLib
 {
+    /// <summary>
+    /// --------- TODO ---------
+    /// 1 - DisplayMethod for justify or centered menu text.
+    /// </summary>
     class Menu
     {
         /// <summary>
@@ -51,13 +56,19 @@ namespace EchelonLib
         /// </summary>
         /// <param name="values"> Menu paramaters as Type.</param>
 
-        private string[] _values;
+        private string[] _values;        
         private static ConsoleColor
             ItemFg = Console.BackgroundColor,
             ItemBg = Console.ForegroundColor,
             uItemFg = Console.ForegroundColor,
             uItemBg = Console.BackgroundColor,
             cFg, cBg;
+
+        public enum Dmethod
+        {
+            Centered,
+            Justify
+        }
 
 
         public Menu(params string[] values)
@@ -94,13 +105,50 @@ namespace EchelonLib
             uItemFg = uFg;
             uItemBg = uBg;
         }
-
-        public int Display(int x = 0, int y = 0)
+        private Dmethod Dm;
+        public Dmethod DisplayMethod
         {
-            return Display(x, y, false);
+            get
+            {
+                return Dm;
+            }
+            set
+            {
+                Dm = value;
+            }
         }
 
-        public int Display(int x = 0, int y = 0, bool arrow = false)
+        private void setDisplayMethod(Dmethod d)
+        {
+            if(d == Dmethod.Centered) { 
+                int longest = _values.OrderByDescending(s => s.Length).First().Length;
+                for (int i = 0; i < _values.Length; i++)
+                {
+                    int spacecountper = (longest - _values[i].Length) / 2;
+                    string last = "";
+                    for (int q = 0; q < spacecountper; q++)
+                    {
+                        last += " ";
+                    }
+                    last += _values[i];
+                    for (int q = 0; q < spacecountper; q++)
+                    {
+                        last += " ";
+                    }
+                    if(_values[i].Length % 2 != 0)
+                    {
+                        last += " ";
+                    }
+                    _values[i] = last;
+                }
+            }
+        }
+
+        public int Display(int x, int y) => Display(x, y, false, Dmethod.Justify);
+        
+        public int Display(int x, int y, Dmethod dmt) => Display(x, y, false, dmt);
+
+        public int Display(int x, int y, bool arrow,Dmethod dmt)
         {
             bool isEnded = false;
             int selectedindex = 0;
@@ -115,6 +163,7 @@ namespace EchelonLib
                 //         │
                 //         ↓
                 //Io.Border();
+                setDisplayMethod(dmt);
                 Console.ForegroundColor = uItemFg;
                 if (arrow) Io.Wat('>', x - 2, RowIndex + selectedindex);
                 Console.ForegroundColor = cFg;
