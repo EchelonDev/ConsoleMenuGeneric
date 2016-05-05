@@ -11,11 +11,12 @@ namespace ConsoleMenuGeneric
     {
         static void Main(string[] args)
         {
-            Console.BufferWidth = Console.WindowWidth = 35;
-            Console.BufferHeight = Console.WindowHeight;            
-            Menu m1 = new Menu(ConsoleColor.Black,ConsoleColor.Green,ConsoleColor.Green,ConsoleColor.Black,"Teeeeeeest", "teeest", "Teeeeeeeeeeest", "tst");
-
-            switch (m1.Display(12, 10,Menu.Dmethod.Centered))
+            Console.BufferWidth = Console.WindowWidth = 40;
+            Console.BufferHeight = Console.WindowHeight = 20;            
+            Menu m1 = new Menu(ConsoleColor.Black,ConsoleColor.Green,ConsoleColor.Green,ConsoleColor.Black,"New Game", "About", "Exit!");
+            Io.Border(ConsoleColor.Green);
+            m1.setDisplayMethod(true);
+            switch (m1.Display(16, 6,true))
             {
                 case 0:
                     {
@@ -47,10 +48,11 @@ namespace EchelonLib
 {
     /// <summary>
     /// --------- TODO ---------
-    /// 1 - DisplayMethod for justify or centered menu text.
+    /// 1 - DisplayMethod for justify or centered menu text. - (DONE KINDA)
+    /// 2 - Make unselectable menu buttons.
     /// 
     /// --------- Notes ---------
-    /// 1 - Consider not using Dmethod enum cuz not user-friendly ()
+    /// 1 - Consider not using Dmethod enum cuz not user-friendly (DONE)
     /// </summary>
     class Menu
     {
@@ -66,13 +68,6 @@ namespace EchelonLib
             uItemFg = Console.ForegroundColor,
             uItemBg = Console.BackgroundColor,
             cFg, cBg;
-
-        public enum Dmethod
-        {
-            Centered,
-            Justify
-        }
-
 
         public Menu(params string[] values)
         {
@@ -108,22 +103,10 @@ namespace EchelonLib
             uItemFg = uFg;
             uItemBg = uBg;
         }
-        private Dmethod Dm;
-        public Dmethod DisplayMethod
+       
+        public void setDisplayMethod(bool d)
         {
-            get
-            {
-                return Dm;
-            }
-            set
-            {
-                Dm = value;
-            }
-        }
-
-        private void setDisplayMethod(Dmethod d)
-        {
-            if(d == Dmethod.Centered) { 
+            if(d == true) { 
                 int longest = _values.OrderByDescending(s => s.Length).First().Length;
                 for (int i = 0; i < _values.Length; i++)
                 {
@@ -147,11 +130,9 @@ namespace EchelonLib
             }
         }
 
-        public int Display(int x, int y) => Display(x, y, false, Dmethod.Justify);
-        
-        public int Display(int x, int y, Dmethod dmt) => Display(x, y, false, dmt);
+        public int Display(int x, int y) => Display(x, y, false);
 
-        public int Display(int x, int y, bool arrow,Dmethod dmt)
+        public int Display(int x, int y, bool arrow)
         {
             bool isEnded = false;
             int selectedindex = 0;
@@ -166,7 +147,6 @@ namespace EchelonLib
                 //         │
                 //         ↓
                 //Io.Border();
-                setDisplayMethod(dmt);
                 Console.ForegroundColor = uItemFg;
                 if (arrow) Io.Wat('>', x - 2, RowIndex + selectedindex);
                 Console.ForegroundColor = cFg;
@@ -233,19 +213,79 @@ namespace EchelonLib
 
             Console.Write(arg.ToString());
         }
-        public static void Border()
+        public static void Border2()
         {
+            int yMax = Console.WindowHeight;
+            int xMax = Console.WindowWidth;
+            char[,] characters = new char[Console.WindowWidth, Console.WindowHeight];
+
+            for (int i = 0; i < Console.WindowWidth; i++)
+            {
+                for (int j = 0; j < Console.WindowHeight; j++)
+                {
+                    char currentChar = ' ';
+
+                    if ((i == 0) || (i == Console.WindowWidth - 1))
+                    {
+                        currentChar = '║';
+                    }
+                    else
+                    {
+                        if ((j == 0) || (j == Console.WindowHeight - 1))
+                        {
+                            currentChar = '═';
+                        }
+                    }
+
+                    characters[i, j] = currentChar;
+                }
+            }
+
+            characters[0, 0] = '╔';
+            characters[Console.WindowWidth - 1, 0] = '╗';
+            characters[0, Console.WindowHeight - 1] = '╚';
+            characters[Console.WindowWidth - 1, Console.WindowHeight - 1] = '╝';
+
+            for (int y = 0; y < yMax; y++)
+            {
+                string line = string.Empty;
+                for (int x = 0; x < xMax; x++)
+                {
+                    line += characters[x, y];
+                }
+                Console.SetCursorPosition(0, y);
+                Console.Write(line);
+            }
+            Console.SetCursorPosition(0, 0);
+        }    
+        public static void Border(ConsoleColor d)
+        {
+            Console.CursorVisible = false;
             // TODO : Fix this crap of shitbag, shit of crapbag or bag of crapshit... pls...
             int lenX = Console.WindowWidth;
             int lenY = Console.WindowHeight;
-            Io.Wat('╔', 0, 0);
+            ConsoleColor def = Console.ForegroundColor;
+            Console.ForegroundColor = d;
+            
+            
+            for (int i = 1; i < lenY - 1; i++)
+                Io.Wat('║', lenX - 1, i);            
+            for (int i = 1; i < lenY - 1; i++)
+                Io.Wat('║', 0, i);
             Io.Wat('╚', 0, lenY - 1);
             Io.Wat('╝', lenX - 1, lenY - 1);
-            //Io.Wat('╗', lenX - 1, 0);
             for (int i = 1; i < lenX - 1; i++)
-            {
                 Io.Wat('═', i, 0);
-            }
+            for (int i = 1; i < lenX - 1; i++)
+                Io.Wat('═', i, lenY - 2);
+            Io.Wat('╔', 0, 0);
+            Io.Wat('╗', lenX - 1, 0);
+
+            //NOTE TO SELF :
+            //When writing the last  corner Buffer area shifts 1 down messing the layout
+            //Try to fix it with MoveBufferArea or find another solution
+            Console.SetCursorPosition(0, 0);
+            Console.ForegroundColor = def;
         }
     }
 }
