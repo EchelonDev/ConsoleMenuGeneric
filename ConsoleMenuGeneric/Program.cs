@@ -207,7 +207,7 @@ namespace EchelonLib
     {
         public static void Wat<Type>(Type arg, int x, int y)
         {
-            Console.CursorLeft = x;
+            Console.CursorLeft = x; //
             Console.CursorTop = y;
 
             Console.Write(arg.ToString());
