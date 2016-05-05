@@ -58,8 +58,7 @@ namespace EchelonLib
     {
         /// <summary>
         /// A console menu with keyboard controls
-        /// </summary>
-        /// <param name="values"> Menu paramaters as Type.</param>
+        /// </summary>        
 
         private string[] _values;        
         private static ConsoleColor
