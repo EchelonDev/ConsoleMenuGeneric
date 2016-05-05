@@ -13,31 +13,37 @@ namespace ConsoleMenuGeneric
         {
             Console.BufferWidth = Console.WindowWidth = 40;
             Console.BufferHeight = Console.WindowHeight = 20;            
-            Menu m1 = new Menu(ConsoleColor.Black,ConsoleColor.Green,ConsoleColor.Green,ConsoleColor.Black,"New Game", "About", "Exit!");
+            Menu m1 = new Menu(ConsoleColor.Black,ConsoleColor.Green,ConsoleColor.Green,ConsoleColor.Black,"New Game","Continue Game", "About", "Exit");
             Io.Border(ConsoleColor.Green);
             m1.setDisplayMethod(true);
-            switch (m1.Display(16, 6,true))
+            switch (m1.Display(17, 6,true))
             {
                 case 0:
                     {
-                        Console.WriteLine("You selected Index 0");
+                        Io.Border(ConsoleColor.Red);
+                        Io.Wat("Game is About to start", Io.centerize("Game is About to start"), 6,ConsoleColor.Red);
                     }
                     break;
                 case 1:
                     {
-                        Console.WriteLine("You selected Index 1");
+                        Io.Border(ConsoleColor.Red);
+                        Io.Wat("Game is About to start", Io.centerize("Game is About to start"), 6, ConsoleColor.Red);
                     }
                     break;
                 case 2:
                     {
-                        Console.WriteLine("You selected Index 2");
+                        Io.Border(ConsoleColor.Cyan);
+                        Io.Wat("About", Io.centerize("About") , 2, ConsoleColor.Cyan);
                     }
                     break;
                 case 3:
                     {
-                        Console.WriteLine("You selected Index 3");
+                        Io.Border(ConsoleColor.Yellow);
+                        Io.Wat("The program will now exit.", Io.centerize("The program will now exit."), 2, ConsoleColor.Yellow);
+                        System.Threading.Thread.Sleep(1000);
+                        return;
                     }
-                    break;
+                    break;                
             }
             Console.ReadLine();
         }
@@ -111,6 +117,10 @@ namespace EchelonLib
                 {
                     int spacecountper = (longest - _values[i].Length) / 2;
                     string last = "";
+                    if (_values[i].Length % 2 == 0)
+                    {
+                        last += " ";
+                    }
                     for (int q = 0; q < spacecountper; q++)
                     {
                         last += " ";
@@ -205,12 +215,27 @@ namespace EchelonLib
 
     public class Io
     {
+        public static int centerize<Type>(Type arg)
+        {
+            return (Console.WindowWidth / 2) - arg.ToString().Length / 2;
+        }
         public static void Wat<Type>(Type arg, int x, int y)
         {
             Console.CursorLeft = x; 
             Console.CursorTop = y;
 
             Console.Write(arg.ToString());
+        }
+
+        public static void Wat<Type>(Type arg, int x, int y,ConsoleColor clr)
+        {
+            ConsoleColor def = Console.ForegroundColor;
+            Console.CursorLeft = x;
+            Console.CursorTop = y;
+
+            Console.ForegroundColor = clr;
+            Console.Write(arg.ToString());
+            Console.ForegroundColor = def;
         }
         public static void Border2()
         {
